@@ -15,20 +15,9 @@ weights1 = np.zeros(shape=(4, 3))
 print(weights1)
 weights2 = np.zeros(shape=(1, 4))
 
-myInput = inputs[0]
-myOutput = outputs[0]
+h_out = weights1.dot(inputs[0])
+pred = weights2.dot(h_out)
+error = pred - outputs[0] ** 2
+delta = pred - outputs[0] 
 
-for i in range(20):
-    for j in range(len(inputs)):
-        pred = inputs[j].dot(weights)
-        error = (pred - outputs[j]) ** 2
-        print("ERROR is: " + str(error))
-        delta = pred - outputs[j]
-        print("DELTA is: " + str(delta))
-        weightDelta = delta * inputs[j]
-        weightDelta = weightDelta * 0.1 #lr
-        weights -= weightDelta
-
-pred = inputs[0].dot(weights)
-print("Final Prediction: " + str(pred))
-print("Final Weights: " + str(weights))
+print("error is" + str(error))
