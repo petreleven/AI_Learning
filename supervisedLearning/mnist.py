@@ -29,9 +29,9 @@ print(target_labels[200])
 
 hidden_layer_size = 10
 output_layer_size = 10
-weights_1 = 2 * np.random.random((784, hidden_layer_size)) - 1
-weights_2 = 2 * np.random.random((hidden_layer_size, output_layer_size)) - 1
-lr = 0.1
+weights_1 = 0.2 * np.random.random((784, hidden_layer_size)) - 0.1
+weights_2 = 0.2 * np.random.random((hidden_layer_size, output_layer_size)) - 0.1
+lr = 0.001
 
 def relu(x):
     return (x > 0) * x
@@ -39,7 +39,7 @@ def relu(x):
 def relu_deriv(x):
     return x > 0
 
-for i in range(100):
+for i in range(300):
     error = 0
     for j in range(len(train_data)):
         layer_1 = train_data[j : j+1]
@@ -55,5 +55,27 @@ for i in range(100):
         
         #WE NEED WEIGHTS DELTAS
         #weight_delta = delta * input
-        weight_delta_l3 = np.dot(layer_2.T, delta_l3)
-        weight_delta_l2 = np.dot(layer_1.T, delta_l2)
+        weight_deltas_l2 = np.dot(layer_2.T, delta_l3)
+        weight_deltas_l1 = np.dot(layer_1.T, delta_l2)
+        
+        #UPDATE THE WEIGHTS
+        #weights = weights - lr * weight_deltas_l2
+        weights_2 -= lr * weight_deltas_l2
+        weights_1 -= lr * weight_deltas_l1
+        
+    print(f"Error is {error}")
+
+def predict(img):
+    layer_1 = img
+    layer_2 = relu(np.dot(layer_1, weights_1))
+    layer_3 = np.dot(layer_2, weights_2) #Output
+    print(layer_3 * 100)
+    
+plt.imshow(train_data[200].reshape(28,28))
+plt.show()
+predict(train_data[200:201])
+
+np.savez("mnistV1.npz",
+         weights_1 = weights_1,
+         weights_2 = weights_2)
+    
