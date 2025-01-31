@@ -9,6 +9,7 @@ keras = "*"
 tensorflow = "*"
 matplotlib = "*"
 flask = "*"
+opencv-python = "*"
 
 [dev-packages]
 

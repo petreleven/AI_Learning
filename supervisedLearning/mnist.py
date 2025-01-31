@@ -8,16 +8,16 @@ print(train_data.shape)
 print(train_labels.shape)
 
 # Reduce our training to 1000 images
-train_data = (train_data[0:1000]) / 255
-train_data = train_data.reshape(1000, 784)
+train_data = (train_data[0:60000]) / 255
+train_data = train_data.reshape(60000, 784)
 
 
 # print(train_data.shape)
 # print(train_data[0])
 
-train_labels = train_labels[0:1000]
+train_labels = train_labels[0:60000]
 print(train_labels[0])
-target_labels = np.zeros((1000, 10))
+target_labels = np.zeros((60000, 10))
 
 for index, value in enumerate(train_labels):
     # print(index, " ", value)
@@ -27,7 +27,7 @@ for index, value in enumerate(train_labels):
 print(train_labels[200])
 print(target_labels[200])
 
-hidden_layer_size = 10
+hidden_layer_size = 40
 output_layer_size = 10
 weights_1 = 0.2 * np.random.random((784, hidden_layer_size)) - 0.1
 weights_2 = 0.2 * np.random.random((hidden_layer_size, output_layer_size)) - 0.1
@@ -39,12 +39,19 @@ def relu(x):
 def relu_deriv(x):
     return x > 0
 
+def softmax(x):
+    numerator = np.exp(x)
+    denominator = np.sum(np.exp(x))
+    y = numerator / denominator
+    return y 
+
+
 for i in range(300):
     error = 0
     for j in range(len(train_data)):
         layer_1 = train_data[j : j+1]
         layer_2 = relu(np.dot(layer_1, weights_1))
-        layer_3 = np.dot(layer_2, weights_2) # Output
+        layer_3 = softmax(np.dot(layer_2, weights_2)) # Output
         # Error
         error += np.sum(layer_3 - target_labels[j:j+1]) ** 2
         
@@ -78,4 +85,3 @@ predict(train_data[200:201])
 np.savez("mnistV1.npz",
          weights_1 = weights_1,
          weights_2 = weights_2)
-    
