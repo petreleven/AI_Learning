@@ -25,16 +25,16 @@ class DrawingCanvas{
         event.preventDefault(); // Prevent scrolling
         this.isdrawing = true;
         let touch = event.touches[0];
-        let touchposition = [touch.clientX, touch.clientY];
-        positions.push([touchposition]);
+        let touchposition = this.calcRelativePos([touch.clientX, touch.clientY]);
+        allPositions.push([touchposition]);
     }
     
     ontouchmove(event) {
         event.preventDefault(); // Prevent scrolling
         if (this.isdrawing) {
           let touch = event.touches[0];
-          let touchposition = [touch.clientX, touch.clientY];
-          positions[positions.length - 1].push(touchposition);
+          let touchposition = this.calcRelativePos([touch.clientX, touch.clientY]);
+          allPositions[allPositions.length - 1].push(touchposition);
           this.draw();
         }
       }
