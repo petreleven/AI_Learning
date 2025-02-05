@@ -51,4 +51,4 @@ def getPred(img, weights_1, weights_2):
         
 
 
-app.run(debug=True, host="0.0.0.0", port=5000)
+#app.run(debug=True, host="0.0.0.0", port=5000)
