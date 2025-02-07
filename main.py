@@ -5,6 +5,12 @@ from reshape import mnist_preprocess
 from flask import jsonify
 app = Flask(__name__)
 
+@app.before_request
+def before_request():
+    if not request.is_secure:
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url, code=301)
+
 @app.route("/")
 def homepage():
     return render_template("index.html")
