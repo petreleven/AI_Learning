@@ -1,5 +1,5 @@
 [phases.setup]
-aptPkgs = ['ffmpeg', 'libsm6', 'libxext6' ]
+aptPkgs = ['libgl1', 'ffmpeg', 'libsm6', 'libxext6' ]
 
 [start]
 cmd = "gunicorn main:app"
