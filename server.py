@@ -11,6 +11,12 @@ app = Flask(__name__)
 #        url = request.url.replace('http://', 'https://', 1)
 #        return redirect(url, code=301)
 
+@app.before_request
+def before_request():
+    if not request.is_secure and request.environ.get('HTTP_X_FORWARDED_PROTO', '') != 'https':
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url, code=301)
+        
 @app.route("/")
 def homepage():
     return render_template("index.html")
