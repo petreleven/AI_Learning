@@ -3,19 +3,20 @@ from flask import render_template
 from flask import request, redirect
 from reshape import mnist_preprocess
 from flask import jsonify
+from werkzeug.middleware.proxy_fix import ProxyFix # new
 app = Flask(__name__)
 
-#@app.before_request
-#def before_request():
-#    if not request.is_secure:
-#        url = request.url.replace('http://', 'https://', 1)
-#        return redirect(url, code=301)
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
 
 @app.before_request
-def before_request():
-    if not request.is_secure and request.environ.get('HTTP_X_FORWARDED_PROTO', '') != 'https':
+def enforce_https():
+    # Check if we're already using HTTPS or if the forwarded proto is HTTPS
+    if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') == 'http':
         url = request.url.replace('http://', 'https://', 1)
         return redirect(url, code=301)
+
         
 @app.route("/")
 def homepage():
