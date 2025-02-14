@@ -119,131 +119,96 @@ function clearCanvas(){
     allPositions = []
 }
 
-function showResultAsHtml(data){
-    // TODO
-    let div = document.getElementById("results");
-    div.innerHTML = `
-        <div class="d-flex flex-row align-items-center">
-            <p>0</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[0])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
+function showResultAsHtml(data) {
+    const div = document.getElementById("results");
+    const maxValue = Math.max(...data);
+    const resultHtml = Array.from(data).map((value, index) => {
+        const percentage = Math.round(value);
+        const isHighest = value === maxValue;
+        return `
+            <div class="prediction-row d-flex flex-row align-items-center p-2 ${isHighest ? 'highlight-prediction' : ''}"
+                 style="opacity: 0; transform: translateX(-20px); animation: slideIn 0.3s ease forwards ${index * 0.05}s;">
+                <div class="digit-label me-3" style="min-width: 30px;">
+                    <span class="fw-bold ${isHighest ? 'text-accent' : ''}">${index}</span>
                 </div>
-            </span>
-            <p>${Math.round(data[0])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>1</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[1])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
+                <div class="progress flex-grow-1 me-3" style="height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                    <div class="progress-bar" 
+                         style="width: ${percentage}%; 
+                                height: 100%; 
+                                background: ${isHighest ? 'linear-gradient(to right, var(--gradient-start), var(--gradient-end))' : 'rgba(255, 255, 255, 0.2)'};
+                                transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
+                    </div>
                 </div>
-            </span>
-            <p>${Math.round(data[1])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>2</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[2])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
+                <div class="percentage-label" style="min-width: 60px;">
+                    <span class="${isHighest ? 'fw-bold text-accent' : ''}">${percentage}%</span>
                 </div>
-            </span>
-            <p>${Math.round(data[2])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>3</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[3])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[3])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>4</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[4])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[4])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>5</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[5])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[5])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>6</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[6])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[6])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>7</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[7])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[7])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>8</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[8])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[8])} %</p>
-        </div>
-        <div class="d-flex flex-row align-items-center">
-            <p>9</p>
-            <span style="width: 200px; height:10px; background-color:grey;">
-                <div
-                    style="width:${Math.round(data[9])}%;
-                    height: 10px;
-                    background-color: blue;"
-                    >
-                </div>
-            </span>
-            <p>${Math.round(data[9])} %</p>
-        </div>
+            </div>
         `;
+    }).join('');
+
+    // Add styles
+    const styles = `
+        <style>
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .text-accent {
+                color: var(--accent-color);
+            }
+
+            .prediction-row {
+                transition: all 0.3s ease;
+                border-radius: 8px;
+                margin-bottom: 4px;
+            }
+
+            .prediction-row:hover {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .highlight-prediction {
+                background: rgba(99, 102, 241, 0.1);
+            }
+
+            .highlight-prediction:hover {
+                background: rgba(99, 102, 241, 0.15);
+            }
+
+            .progress-bar {
+                transform-origin: left;
+                animation: growBar 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            @keyframes growBar {
+                from {
+                    transform: scaleX(0);
+                }
+                to {
+                    transform: scaleX(1);
+                }
+            }
+        </style>
+    `;
+
+    div.innerHTML = styles + `
+        <div class="results-container p-3">
+            ${resultHtml}
+        </div>
+    `;
+
+    // Update the accuracy meter in the main UI
+    const accuracyFill = document.querySelector('.accuracy-fill');
+    if (accuracyFill) {
+        accuracyFill.style.width = `${maxValue}%`;
+    }
 }
    
 function mousedown(message){
