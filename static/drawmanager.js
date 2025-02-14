@@ -136,7 +136,7 @@ function showResultAsHtml(data){
                     >
                 </div>
             </span>
-            <p class="ms-3" style="color:white;">${Math.round(data[0])}%</p>
+            <p class="ms-3" style="color:white;">${Math.round(data[i])}%</p>
         </div>
         `;
     }
