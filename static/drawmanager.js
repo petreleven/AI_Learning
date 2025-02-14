@@ -119,98 +119,141 @@ function clearCanvas(){
     allPositions = []
 }
 
-function showResultAsHtml(data) {
-    const div = document.getElementById("results");
-    const maxValue = Math.max(...data);
-    const resultHtml = Array.from(data).map((value, index) => {
-        const percentage = Math.round(value);
-        const isHighest = value === maxValue;
-        return `
-            <div class="prediction-row d-flex flex-row align-items-center p-2 ${isHighest ? 'highlight-prediction' : ''}"
-                 style="opacity: 0; transform: translateX(-20px); animation: slideIn 0.3s ease forwards ${index * 0.05}s;">
-                <div class="digit-label me-3" style="min-width: 30px;">
-                    <span class="fw-bold ${isHighest ? 'text-accent' : ''}">${index}</span>
+function showResultAsHtml(data){
+    let div = document.getElementById("results");
+    div.innerHTML = `
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">0</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[0])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
                 </div>
-                <div class="progress flex-grow-1 me-3" style="height: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
-                    <div class="progress-bar" 
-                         style="width: ${percentage}%; 
-                                height: 100%; 
-                                background: ${isHighest ? 'linear-gradient(to right, var(--gradient-start), var(--gradient-end))' : 'rgba(255, 255, 255, 0.2)'};
-                                transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);">
-                    </div>
-                </div>
-                <div class="percentage-label" style="min-width: 60px;">
-                    <span class="${isHighest ? 'fw-bold text-accent' : ''}">${percentage}%</span>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    // Add styles
-    const styles = `
-        <style>
-            @keyframes slideIn {
-                from {
-                    opacity: 0;
-                    transform: translateX(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-            }
-
-            .text-accent {
-                color: var(--accent-color);
-            }
-
-            .prediction-row {
-                transition: all 0.3s ease;
-                border-radius: 8px;
-                margin-bottom: 4px;
-            }
-
-            .prediction-row:hover {
-                background: rgba(255, 255, 255, 0.05);
-            }
-
-            .highlight-prediction {
-                background: rgba(99, 102, 241, 0.1);
-            }
-
-            .highlight-prediction:hover {
-                background: rgba(99, 102, 241, 0.15);
-            }
-
-            .progress-bar {
-                transform-origin: left;
-                animation: growBar 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            @keyframes growBar {
-                from {
-                    transform: scaleX(0);
-                }
-                to {
-                    transform: scaleX(1);
-                }
-            }
-        </style>
-    `;
-
-    div.innerHTML = styles + `
-        <div class="results-container p-3">
-            ${resultHtml}
+            </span>
+            <p class="ms-3">${Math.round(data[0])}%</p>
         </div>
-    `;
-
-    // Update the accuracy meter in the main UI
-    const accuracyFill = document.querySelector('.accuracy-fill');
-    if (accuracyFill) {
-        accuracyFill.style.width = `${maxValue}%`;
-    }
-}
-   
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">1</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[1])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[1])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">2</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[2])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[2])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">3</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[3])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[3])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">4</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[4])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[4])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">5</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[5])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[5])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">6</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[6])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[6])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">7</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[7])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[7])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">8</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[8])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[8])}%</p>
+        </div>
+        <div class="d-flex flex-row align-items-center mb-2">
+            <p class="me-3 fw-bold" style="min-width: 25px;">9</p>
+            <span style="width: 200px; height: 12px; background-color: rgba(255, 255, 255, 0.1); border-radius: 6px; overflow: hidden;">
+                <div
+                    style="width:${Math.round(data[9])}%;
+                    height: 12px;
+                    background: linear-gradient(90deg, #6366F1, #3B82F6);
+                    transition: width 0.3s ease;"
+                    >
+                </div>
+            </span>
+            <p class="ms-3">${Math.round(data[9])}%</p>
+        </div>
+        `;
+}  
 function mousedown(message){
     console.log("clicked");
     console.log(message);
